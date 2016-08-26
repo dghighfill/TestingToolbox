@@ -11,4 +11,9 @@ public class Bank {
 		this.name = name;
 	}
 
+	@Override
+	public String toString() {
+	    return "Bank [name=" + name + "]";
+	}
+
 }
