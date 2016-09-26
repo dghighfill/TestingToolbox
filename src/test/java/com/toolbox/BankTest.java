@@ -12,7 +12,7 @@
  */
 package com.toolbox;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.MatcherAssert.*;
 import static org.hamcrest.Matchers.*;
 
 import java.util.List;
@@ -59,9 +59,9 @@ public class BankTest extends Bank {
     @Test
     public void testIsEqualToIgnoringWhiteSpace(){
 	bank.setName("Second National Bank     ");
-	assertThat( bank.getName(), equalToIgnoringWhiteSpace("     Second National Bank"));
+	assertThat( bank.getName(), is( equalToIgnoringWhiteSpace("     Second National Bank")));
 	bank.setName("Second\tNational\tBank");
-	assertThat( bank.getName(), equalToIgnoringWhiteSpace("Second National Bank"));
+	assertThat( bank.getName(), is( equalToIgnoringWhiteSpace("Second National Bank")));
     }
     
     @Test
@@ -76,6 +76,20 @@ public class BankTest extends Bank {
 	assertThat( bank.getName(), equalTo("Second National Bank"));
     }
     
+    // Core Matchers
+    @Test 
+    public void testIs(){
+	bank.setName( "First National Bank" );
+	assertThat( bank.getName(), is( "First National Bank") );
+	assertThat( bank.getName().equals( "First National Bank"), is(true));
+    }
+
+    @Test 
+    public void testIsA(){
+	bank.setName( "First National Bank" );
+	assertThat( bank.getName(), isA( String.class ) );
+    }
+
     @Test
     public void testContainsString(){
 	bank.setName("Second National Bank");
@@ -93,7 +107,7 @@ public class BankTest extends Bank {
 	bank.setName("Second National Bank");
 	assertThat( bank.getName(), endsWith( "Bank") );
     }
-
+    
     // Object Matchers
     @Test
     public void testHasToString(){
@@ -130,7 +144,16 @@ public class BankTest extends Bank {
 	prop.setValue("name", "Second National Bank");
 	assertThat( prop.getValue("name").toString(), equalTo("Second National Bank") );
     }
-    // TODO Still have more matchers in org.hamcrest.beans package to test.
+    
+    @Test
+    public void testSamePropertyValuesAs(){
+	bank.setName( "First National Bank");
+	Bank expectedBank = new Bank();
+	expectedBank.setName("First National Bank");
+	assertThat( bank, samePropertyValuesAs( expectedBank ));
+    }
+    // Bean Matchers
+    
     // Useless Matchers
     @Test
     public void testIsAnything(){
@@ -138,6 +161,12 @@ public class BankTest extends Bank {
 	assertThat( bank, anything() );
 	// You'll never see this description.
 	assertThat( bank, anything("the bank's name"));
+    }
+    
+    @Test
+    public void testGuaranteedFailure(){
+	// Commented out so that we can always have a green bar
+	// assertThat( "This test will always fail", false);
     }
 }
 
